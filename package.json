@@ -4,6 +4,7 @@
     "description": "Point cloud rendering using Three.js",
     "main": "index.js",
     "scripts": {
+      "django": "cd backend && python manage.py runserver",
       "pack": "npx webpack --mode development",
       "start": "webpack serve --mode development"
     },
@@ -12,7 +13,7 @@
       "point cloud",
       "PLY file"
     ],
-    "author": "Your Name",
+    "author": "Jiabin Pan",
     "license": "MIT",
     "devDependencies": {
       "webpack": "^5.65.0",

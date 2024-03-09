@@ -1,131 +1,104 @@
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    Mesh,
+    PlaneBufferGeometry,
+    ShadowMaterial,
+    DirectionalLight,
+    PCFSoftShadowMap,
+    sRGBEncoding,
+    Color,
+    AmbientLight,
+    Box3,
+    LoadingManager,
+    MathUtils,
+} from 'three';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
+import URDFLoader from './URDFLoader.js';
 
-// 创建场景
-const scene = new THREE.Scene();
+let scene, camera, renderer, robot, controls;
 
-// 创建相机
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
-
-// 创建渲染器
-const renderer = new THREE.WebGLRenderer();
-const canvasContainer = document.getElementById('renderCanvas');
-renderer.setSize(canvasContainer.clientWidth, window.clientHeight);
-canvasContainer.appendChild(renderer.domElement);
-
-window.addEventListener('resize', onWindowResize);
-onWindowResize();
-
-// 创建渐变背景
-const gradientTexture = createGradientTexture();
-scene.background = gradientTexture;
-
-// 绘制世界坐标系
-// const axesHelper = new THREE.AxesHelper(3); // 设置坐标轴长度为3
-// scene.add(axesHelper);
-createAxes(scene)
-
-// 添加轨道控制器
-const controls = new OrbitControls(camera, renderer.domElement);
-
-// 设置控制器属性
-controls.enableDamping = true; // 开启阻尼效果，使动画更平滑
-controls.dampingFactor = 0.25; // 阻尼系数
-
-// 文件输入变化事件
 document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
 
-// 渲染按钮点击事件
-document.getElementById('renderButton').addEventListener('click', function() {
-  try {
-    render();
-  } catch (error) {
-    alert('Rendering error: ' + error.message);
-  }
-});
+init();
+render();
 
-// 开始渲染循环
-animate();
+function init() {
 
-function animate() {
-  requestAnimationFrame(animate);
-  render();
-}
+    scene = new Scene();
+    scene.background = new Color(0x263238);
 
-function render() {
-  renderer.render(scene, camera);
-  console.log("Sence has points? ", scene.hasPoints);
-  controls.update(); // 更新控制器，使其响应鼠标操作
+    camera = new PerspectiveCamera();
+    camera.position.set(10, 10, 10);
+    camera.lookAt(0, 0, 0);
+
+    renderer = new WebGLRenderer({ antialias: true });
+    const canvasContainer = document.getElementById('renderCanvas');
+    renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+    renderer.outputEncoding = sRGBEncoding;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
+    canvasContainer.appendChild(renderer.domElement);
+
+    createAxes(scene)
+
+    const directionalLight = new DirectionalLight(0xffffff, 1.0);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.setScalar(1024);
+    directionalLight.position.set(5, 30, 5);
+    scene.add(directionalLight);
+
+    const ambientLight = new AmbientLight(0xffffff, 0.2);
+    scene.add(ambientLight);
+
+    const ground = new Mesh(new PlaneBufferGeometry(), new ShadowMaterial({ opacity: 0.25 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.scale.setScalar(30);
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // 开启阻尼效果，使动画更平滑
+    controls.dampingFactor = 0.25; // 阻尼系数
+    // controls.minDistance = 4;
+    // controls.target.y = 1;
+    controls.update();
+
+    // onResize();
+    // window.addEventListener('resize', onResize);
+
 }
 
 function handleFileSelect(event) {
   const file = event.target.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const buffer = event.target.result;
-      const loader = new PLYLoader();
-      const geometry = loader.parse(buffer);
-
-      const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 });
-      const points = new THREE.Points(geometry, material);
-
-      // 检测加载后的 points 是否存在点，并将结果打印出来
-      const nbrGeoPnts = geometry.attributes.position.length
-      const hasPoints = nbrGeoPnts > 0;
-      console.log("Points exist in the point cloud:", hasPoints);
-      console.log("Number of points in geometry is:", nbrGeoPnts);
-
-      // 获取点的数量并打印到控制台
-      const numPoints = points.length;
-      console.log("THREE.Points is:\n", points);
-
-      scene.add(points);
-      controls.target.copy(points.position); // 将控制器的目标设为点云的位置，使视角初始时对准点云中心
-      controls.update(); // 更新控制器
-
-      // 自动调整相机视角以适配加载的点云
-      const box = new THREE.Box3().setFromObject(points);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = camera.fov * (Math.PI / 180);
-      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-      cameraZ *= 1.5; // 放大相机视角以留出一些余量
-      camera.position.z = cameraZ;
-    };
-    reader.readAsArrayBuffer(file);
+    // Load robot
+    const manager = new LoadingManager();
+    const loader = new URDFLoader(manager);
+    loader.load(file, result => {
+      robot = result;
+    });
+  scene.add(robot);
   }
 }
 
-// 窗口大小变化时更新渲染器的大小
-function onWindowResize() {
-  const width = canvasContainer.clientWidth;
-  const height = canvasContainer.clientHeight;
-  renderer.setSize(width, height);
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
+function onResize() {
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
 }
 
-function createGradientTexture() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 1;
-  canvas.height = 256;
-  const context = canvas.getContext('2d');
+function render() {
 
-  // 创建渐变
-  const gradient = context.createLinearGradient(0, 0, 0, 256);
-  gradient.addColorStop(0, '#000000'); // 黑色
-  gradient.addColorStop(1, '#0000FF'); // 蓝色
+    requestAnimationFrame(render);
+    renderer.render(scene, camera);
 
-  // 填充渐变
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, 1, 256);
-
-  const texture = new THREE.CanvasTexture(canvas);
-  return texture;
 }
 
 function createAxes(scene) {
