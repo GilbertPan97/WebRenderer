@@ -1,0 +1,27 @@
+{
+    "name": "ply-renderer",
+    "version": "1.0.0",
+    "description": "Point cloud rendering using Three.js",
+    "main": "index.js",
+    "scripts": {
+      "pack": "npx webpack --mode development",
+      "start": "webpack serve --mode development"
+    },
+    "keywords": [
+      "Three.js",
+      "point cloud",
+      "PLY file"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "devDependencies": {
+      "webpack": "^5.65.0",
+      "webpack-cli": "^4.9.0",
+      "webpack-dev-server": "^4.7.3"
+    },
+    "dependencies": {
+      "three": "^0.134.0"
+    }
+}
+
+  

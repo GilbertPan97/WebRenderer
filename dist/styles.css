@@ -1,0 +1,22 @@
+.container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #d3d2d2; /* 设置背景颜色为浅灰色 */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1; /* 确保按钮位于画布之上 */
+}
+
+#renderCanvas {
+  position: relative;
+  margin-top: 80px; /* 调整画布与按钮之间的间距 */
+  height: 600px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border: 4px solid #00FFFF; /* 添加荧光蓝色粗线条轮廓 */
+}
+
+  
