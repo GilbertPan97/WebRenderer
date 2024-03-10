@@ -4,25 +4,34 @@
     "description": "Point cloud rendering using Three.js",
     "main": "index.js",
     "scripts": {
-      "django": "cd backend && python manage.py runserver",
-      "pack": "npx webpack --mode development",
-      "start": "webpack serve --mode development"
+        "django-server": "cd backend && python manage.py runserver",
+        "pack": "npx webpack --mode development",
+        "start": "webpack serve --mode development",
+        "start-examples": "concurrently \"parcel watch ./example/*.html --out-dir ./example/dev-bundle/ --public-url . --no-cache\" \"cd .. && static-server\"",
+        "build-examples": "parcel build ./example/*.html --out-dir ./example/bundle/ --public-url . --no-cache --no-source-maps --no-content-hash"
     },
     "keywords": [
-      "Three.js",
-      "point cloud",
-      "PLY file"
+        "Three.js",
+        "point cloud",
+        "PLY file"
     ],
     "author": "Jiabin Pan",
     "license": "MIT",
     "devDependencies": {
-      "webpack": "^5.65.0",
-      "webpack-cli": "^4.9.0",
-      "webpack-dev-server": "^4.7.3"
+        "@babel/core": "^7.24.0",
+        "@babel/preset-env": "^7.24.0",
+        "babel-jest": "^29.7.0",
+        "webpack": "^5.65.0",
+        "webpack-cli": "^4.9.0",
+        "webpack-dev-server": "^4.7.3"
     },
     "dependencies": {
-      "three": "^0.134.0"
+        "concurrently": "^8.2.2",
+        "jest": "^29.7.0",
+        "jsdom": "^24.0.0",
+        "node-fetch": "^3.3.2",
+        "parcel-bundler": "^1.12.5",
+        "three": "^0.134.0",
+        "ts-jest": "^29.1.2"
     }
 }
-
-  
