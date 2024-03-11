@@ -59,13 +59,6 @@ function init() {
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // const manager = new LoadingManager();
-    // const loader = new URDFLoader(manager);
-    // loader.load('./urdfs/kuka_iiwa/model.urdf', result => {
-    //   robot = result;
-    // });
-    // scene.add(robot);
-
     // Load robot
     const manager = new LoadingManager();
     const loader = new URDFLoader(manager);
@@ -75,26 +68,21 @@ function init() {
 
     // wait until all the geometry has loaded to add the model to the scene
     manager.onLoad = () => {
-
         robot.rotation.x = Math.PI / 2;
         robot.traverse(c => {
             c.castShadow = true;
         });
         for (let i = 1; i <= 6; i++) {
-
             robot.joints[`HP${ i }`].setJointValue(MathUtils.degToRad(30));
             robot.joints[`KP${ i }`].setJointValue(MathUtils.degToRad(120));
             robot.joints[`AP${ i }`].setJointValue(MathUtils.degToRad(-60));
-
         }
         robot.updateMatrixWorld(true);
 
         const bb = new Box3();
         bb.setFromObject(robot);
-
         robot.position.y -= bb.min.y;
         scene.add(robot);
-
     };
 
     controls = new OrbitControls(camera, renderer.domElement);

@@ -10,3 +10,8 @@ __pycache__
 
 # point cloud files
 *.ply
+
+# web build files
+example/bundle
+example/dev-bundle
+dist/bundle.js

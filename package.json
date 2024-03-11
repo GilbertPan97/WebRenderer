@@ -7,8 +7,10 @@
         "django-server": "cd backend && python manage.py runserver",
         "pack": "npx webpack --mode development",
         "start": "webpack serve --mode development",
+        "start::pack": "http-server -c1 --cors -o dist",
         "start-examples": "concurrently \"parcel watch ./example/*.html --out-dir ./example/dev-bundle/ --public-url . --no-cache\" \"cd .. && static-server\"",
-        "build-examples": "parcel build ./example/*.html --out-dir ./example/bundle/ --public-url . --no-cache --no-source-maps --no-content-hash"
+        "build-examples": "parcel build ./example/*.html --out-dir ./example/bundle/ --public-url . --no-cache --no-source-maps --no-content-hash",
+        "start-example": "static-server -i example/bundle/index.html --cors '*'"
     },
     "keywords": [
         "Three.js",
@@ -21,9 +23,11 @@
         "@babel/core": "^7.24.0",
         "@babel/preset-env": "^7.24.0",
         "babel-jest": "^29.7.0",
+        "static-server": "^2.2.1",
         "webpack": "^5.65.0",
         "webpack-cli": "^4.9.0",
-        "webpack-dev-server": "^4.7.3"
+        "webpack-dev-server": "^4.7.3",
+        "http-server": "^14.1.1"
     },
     "dependencies": {
         "concurrently": "^8.2.2",
