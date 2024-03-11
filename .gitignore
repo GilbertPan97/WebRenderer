@@ -6,7 +6,7 @@ backend/venv/
 backend/.idea/
 
 # python cache files
-__pycache__
+__pycache__/
 
 # point cloud files
 *.ply

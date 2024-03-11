@@ -9,7 +9,7 @@ robot_id = None
 joint_indices = None
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.d.html')
 
 
 def get_simulation_data(request):
