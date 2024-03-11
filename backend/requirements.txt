@@ -1,0 +1,6 @@
+Django>=4.0,<4.1
+djangorestframework>=3.12.4
+channels>=3.0.4
+channels-redis>=3.3.1
+pybullet>=3.1.7
+numpy>=1.19.5

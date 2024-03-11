@@ -1,8 +1,12 @@
+# web deps
 node_modules/
 
+# python virtual environment and pycharm folder
 backend/venv/
+backend/.idea/
 
-urdf/
-urdfs/
+# python cache files
+__pycache__
 
+# point cloud files
 *.ply
