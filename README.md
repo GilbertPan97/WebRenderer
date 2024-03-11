@@ -27,7 +27,7 @@ Before you begin, ensure you have the following installed on your system:
 1. Clone the WebRenderer repository to your local machine:
 
    ```
-   git clone https://github.com/yourusername/WebRenderer.git
+   git clone https://github.com/GilbertPan97/WebRenderer.git
    ```
 
 2. Navigate to the project directory:
