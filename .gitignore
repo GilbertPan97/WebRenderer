@@ -11,6 +11,10 @@ __pycache__
 # point cloud files
 *.ply
 
+# zip files
+*.zip
+*.tgz
+
 # web build files
 example/bundle
 example/dev-bundle
