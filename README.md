@@ -12,7 +12,7 @@ Welcome to the WebRenderer project! WebRenderer is a cutting-edge, web-based ren
 
 ![Django Backend](./docs/imgs/django-backend.png)
 
-![Web Render](./docs/imgs/webRender.png)
+![Web Render](./docs/imgs/webRenderer.png)
 
 ## Getting Started
 
