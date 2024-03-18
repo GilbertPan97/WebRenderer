@@ -1,7 +1,7 @@
 {
-    "name": "ply-renderer",
+    "name": "WebRenderer",
     "version": "1.0.0",
-    "description": "Point cloud rendering using Three.js",
+    "description": "Robot dynamic simulation rendering using Three.js and pybullet",
     "main": "index.js",
     "scripts": {
         "django-server": "cd backend && python manage.py runserver",
@@ -14,8 +14,10 @@
     },
     "keywords": [
         "Three.js",
-        "point cloud",
-        "PLY file"
+        "Pybullet",
+        "Dynamic",
+        "Robot",
+        "3D Rendering"
     ],
     "author": "Jiabin Pan",
     "license": "MIT",
